@@ -1,7 +1,7 @@
 defmodule Board do
   def print_board(board_values) do
     board_string = get_board_string(board_values)
-    list = List.flatten(Regex.scan(~r/.../, board_string))
+    list = Regex.scan(~r/.../, board_string)
     Enum.join(list, "\n")
   end
 
@@ -12,11 +12,19 @@ defmodule Board do
       board_values
     end
   end
+
+  def make_move(current_board, move, marker) do
+    String.replace(current_board, move, marker)
+  end
 end
 
 defmodule ConsoleInOut do
   def print(output) do
     IO.puts(output)
+  end
+
+  def read do
+    IO.gets "Enter a number to make your move: \n"
   end
 end
 
