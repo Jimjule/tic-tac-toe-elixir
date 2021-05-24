@@ -1,6 +1,10 @@
 defmodule TicTacToeElixir do
   def start do
-    IO.puts "Welcome to TicTacToe - Elixir Edition!"
+    IO.puts greet() 
+  end
+
+  def greet do
+    "Welcome to TicTacToe - Elixir Edition!"
   end
 end
 
