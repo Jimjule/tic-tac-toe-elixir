@@ -1,7 +1,6 @@
 defmodule Board do
   def print_board(board_values) do
-    board_string = get_board_string(board_values)
-    list = Regex.scan(~r/.../, board_string)
+    list = Regex.scan(~r/.../, get_board_string(board_values))
     Enum.join(list, "\n")
   end
 
