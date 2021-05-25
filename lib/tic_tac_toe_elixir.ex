@@ -26,11 +26,11 @@ defmodule TicTacToeElixir do
   end
 
   defp greet do
-    "Welcome to TicTacToe - Elixir Edition!"
+    "\n===Welcome to TicTacToe - Elixir Edition!===\n"
   end
 
   defp explain_rules do
-    "The first player to move is X. To make a move, type the number of an unmarked square. To win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
+    "The first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
   end
 end
 
