@@ -1,14 +1,6 @@
 defmodule Board do
   def print_board(board_values) do
-    Regex.scan(~r/.../, get_board_string(board_values)) |> Enum.join("\n")
-  end
-
-  def get_board_string(board_values) do
-    if board_values == nil do
-      "123456789"
-    else
-      board_values
-    end
+    Regex.scan(~r/.../, board_values) |> Enum.join("\n")
   end
 
   def make_move(current_board, move, marker) do
@@ -30,7 +22,7 @@ defmodule TicTacToeElixir do
   def start(in_out) do
     in_out.print greet()
     in_out.print explain_rules()
-    in_out.print Board.print_board(nil)
+    in_out.print Board.print_board("123456789")
   end
 
   defp greet do
