@@ -3,11 +3,11 @@ defmodule BoardTest do
   doctest TicTacToeElixir
 
   test "returns blank 3x3 board" do
-    assert Board.print_board("123456789") == "123\n456\n789"
+    assert Board.split_board("123456789") == "123\n456\n789"
   end
 
   test "returns populated 3x3 board" do
-    assert Board.print_board("12X4O6X89") == "12X\n4O6\nX89"
+    assert Board.split_board("12X4O6X89") == "12X\n4O6\nX89"
   end
 
   test "board makes move if square available" do
@@ -16,5 +16,25 @@ defmodule BoardTest do
 
   test "board unchanged if square occupied" do
     assert Board.make_move("X23456789", "1", "O") == "X23456789"
+  end
+
+  test "game is over when board is full without a victory" do
+    assert Board.game_over("XOXXOOOXX", "X") == true
+  end
+
+  test "game is not over when board is not full" do
+    assert Board.game_over("XOXXOOOX9", "X") == false
+  end
+
+  test "game is over when X gets a row" do
+    assert Board.game_over("XXXOO6789", "X") == true
+  end
+
+  test "is checked when iterator is 3" do
+    assert Board.is_checked?(3, 3) == true
+  end
+
+  test "is not checked when iterator is under 3" do
+    assert Board.is_checked?(3, 2) == false
   end
 end
