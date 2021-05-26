@@ -20,42 +20,35 @@ defmodule Board do
   end
 
   def check_row_loop(board_values, board_side_length, row_iterator, column_iterator, marker) do
-    if is_checked?(board_side_length, row_iterator) do
-      false
-    else
-      if check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
-        true
-      else
-        check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
-      end
+    cond do
+      is_checked?(board_side_length, row_iterator) -> false
+      check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) -> true
+      true -> check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
     end
   end
 
   def is_checked?(board_side_length, iterator) do
-    if board_side_length > iterator do
-      false
-    else
-      true
+    cond do
+      board_side_length > iterator -> false
+      true -> true
+    end
+  end
+
+  def check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
+    cond do
+      is_checked?(board_side_length, row_iterator) -> false
+      true -> check_row(board_values, board_side_length, row_iterator, column_iterator, marker)
     end
   end
 
   def check_row(board_values, board_side_length, row_iterator, column_iterator, marker) do
     if String.at(board_values, board_side_length * row_iterator + column_iterator) == marker do
-      if column_iterator == board_side_length - 1 do
-        true
-      else
-        check_row_victory(board_values, board_side_length, row_iterator, column_iterator + 1, marker)
+      case column_iterator == board_side_length - 1 do
+        true -> true
+        false -> check_row_victory(board_values, board_side_length, row_iterator, column_iterator + 1, marker)
       end
     else
       check_row_victory(board_values, board_side_length, row_iterator + 1, 0, marker)
-    end
-  end
-
-  def check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
-    if is_checked?(board_side_length, row_iterator) do
-      false
-    else
-      check_row(board_values, board_side_length, row_iterator, column_iterator, marker)
     end
   end
 end
