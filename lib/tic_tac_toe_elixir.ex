@@ -34,6 +34,13 @@ defmodule Board do
     end
   end
 
+  def check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
+    cond do
+      is_checked?(board_side_length, row_iterator) -> false
+      true -> check_row(board_values, board_side_length, row_iterator, column_iterator, marker)
+    end
+  end
+
   def check_row(board_values, board_side_length, row_iterator, column_iterator, marker) do
     if String.at(board_values, board_side_length * row_iterator + column_iterator) == marker do
       case column_iterator == board_side_length - 1 do
@@ -42,13 +49,6 @@ defmodule Board do
       end
     else
       check_row_victory(board_values, board_side_length, row_iterator + 1, 0, marker)
-    end
-  end
-
-  def check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
-    cond do
-      is_checked?(board_side_length, row_iterator) -> false
-      true -> check_row(board_values, board_side_length, row_iterator, column_iterator, marker)
     end
   end
 end
