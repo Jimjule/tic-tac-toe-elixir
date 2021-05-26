@@ -16,13 +16,21 @@ defmodule Board do
   end
 
   def check_for_victory(board_values, board_side_length, marker) do
-    check_row_loop(board_values, board_side_length, 0, 0, marker)
+    check_row_loop(board_values, board_side_length, 0, 0, marker) or check_column_loop(board_values, board_side_length, 0, 0, marker)
   end
 
   def check_row_loop(board_values, board_side_length, row_iterator, column_iterator, marker) do
     cond do
       is_checked?(board_side_length, row_iterator) -> false
       check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) -> true
+      true -> check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
+    end
+  end
+
+  def check_column_loop(board_values, board_side_length, row_iterator, column_iterator, marker) do
+    cond do
+      is_checked?(board_side_length, column_iterator) -> false
+      check_column_victory(board_values, board_side_length, row_iterator, column_iterator, marker) -> true
       true -> check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
     end
   end
@@ -41,6 +49,13 @@ defmodule Board do
     end
   end
 
+  def check_column_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
+    cond do
+      is_checked?(board_side_length, column_iterator) -> false
+      true -> check_column(board_values, board_side_length, row_iterator, column_iterator, marker)
+    end
+  end
+
   def check_row(board_values, board_side_length, row_iterator, column_iterator, marker) do
     if String.at(board_values, board_side_length * row_iterator + column_iterator) == marker do
       case column_iterator == board_side_length - 1 do
@@ -49,6 +64,17 @@ defmodule Board do
       end
     else
       check_row_victory(board_values, board_side_length, row_iterator + 1, 0, marker)
+    end
+  end
+
+  def check_column(board_values, board_side_length, row_iterator, column_iterator, marker) do
+    if String.at(board_values, board_side_length * row_iterator + column_iterator) == marker do
+      case row_iterator == board_side_length - 1 do
+        true -> true
+        false -> check_column_victory(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
+      end
+    else
+      check_column_victory(board_values, board_side_length, 0, column_iterator + 1, marker)
     end
   end
 end
