@@ -28,10 +28,9 @@ defmodule Board do
   end
 
   def is_checked?(board_side_length, iterator) do
-    if board_side_length > iterator do
-      false
-    else
-      true
+    cond do
+      board_side_length > iterator -> false
+      true -> true
     end
   end
 
