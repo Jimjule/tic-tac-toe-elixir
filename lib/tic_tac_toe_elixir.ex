@@ -20,14 +20,10 @@ defmodule Board do
   end
 
   def check_row_loop(board_values, board_side_length, row_iterator, column_iterator, marker) do
-    if is_checked?(board_side_length, row_iterator) do
-      false
-    else
-      if check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) do
-        true
-      else
-        check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
-      end
+    cond do
+      is_checked?(board_side_length, row_iterator) -> false
+      check_row_victory(board_values, board_side_length, row_iterator, column_iterator, marker) -> true
+      true -> check_row_loop(board_values, board_side_length, row_iterator + 1, column_iterator, marker)
     end
   end
 
