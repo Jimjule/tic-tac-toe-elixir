@@ -16,7 +16,19 @@ defmodule Board do
   end
 
   def check_for_victory(board_values, board_side_length, marker) do
-    check_row_loop(board_values, board_side_length, 0, 0, marker) or check_column_loop(board_values, board_side_length, 0, 0, marker)
+    check_diagonal_victory(board_values, marker) or check_row_loop(board_values, board_side_length, 0, 0, marker) or check_column_loop(board_values, board_side_length, 0, 0, marker)
+  end
+
+  def check_diagonal_victory(board_values, marker) do
+    check_rising_diagonal(board_values, marker) or check_falling_diagonal(board_values, marker)
+  end
+
+  def check_rising_diagonal(board_values, marker) do
+    String.at(board_values, 2) == marker and String.at(board_values, 4) == marker and String.at(board_values, 6) == marker
+  end
+
+  def check_falling_diagonal(board_values, marker) do
+    String.at(board_values, 0) == marker and String.at(board_values, 4) == marker and String.at(board_values, 8) == marker
   end
 
   def check_row_loop(board_values, board_side_length, row_iterator, column_iterator, marker) do
