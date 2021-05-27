@@ -118,11 +118,22 @@ defmodule TicTacToeElixir do
     in_out.print greet()
     in_out.print explain_rules()
     in_out.print Board.split_board("123456789")
+    in_out.print Board.winner(game_loop(true, "123456789", "X", "O", "X", 1), 3, "X", "O")
   end
 
-  defp game_loop(game_is_over?, board_values) do
+  defp not_max_turn(board_side_length, turn) do
+    turn <= board_side_length * board_side_length
+  end
 
-    game_loop(Board.game_over(board_values), board_values)
+  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn) do
+    cond do
+      not_max_turn(3, turn) -> turn_logic(board_values, marker_one, marker_two, current_player, turn)
+      true -> board_values
+    end
+  end
+
+  defp turn_logic(board_values, marker_one, marker_two, current_player, turn) do
+    game_loop(Board.game_over(board_values, current_player), board_values, marker_one, marker_two, current_player, turn + 1)
   end
 
   defp greet do
