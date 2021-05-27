@@ -114,10 +114,10 @@ defmodule ConsoleInOut do
 end
 
 defmodule TicTacToeElixir do
-  def start(in_out) do
+  def start(in_out\\ ConsoleInOut) do
     in_out.print greet()
     in_out.print explain_rules()
-    in_out.print Board.winner(game_loop(false, "123456789", "X", "O", "X", 1, in_out), "X", "O")
+    game_loop(false, "123456789", "X", "O", "X", 1, in_out) |> Board.winner("X", "O") |> in_out.print
   end
 
   defp not_max_turn(board_side_length, turn) do
@@ -139,7 +139,7 @@ defmodule TicTacToeElixir do
   defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
     in_out.print Board.split_board(board_values)
     updated_board = Board.make_move(board_values, in_out.read(), current_player)
-    game_loop(Board.game_over(updated_board, current_player), updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
+    Board.game_over(updated_board, current_player) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
   end
 
   defp swap_player(marker_one, marker_two, current_player) do
@@ -158,5 +158,3 @@ defmodule TicTacToeElixir do
     "The first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
   end
 end
-
-TicTacToeElixir.start(ConsoleInOut)
