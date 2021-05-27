@@ -15,6 +15,10 @@ defmodule Board do
     String.replace(board_values, "X", "") |> String.replace("O", "") |> String.length() == 0
   end
 
+  def there_is_a_winner?(board_values, board_side_length, marker_one, marker_two) do
+    check_for_victory(board_values, board_side_length, marker_one) or check_for_victory(board_values, board_side_length, marker_two)
+  end
+
   def check_for_victory(board_values, board_side_length, marker) do
     check_diagonal_victory(board_values, marker) or check_row_loop(board_values, board_side_length, 0, 0, marker) or check_column_loop(board_values, board_side_length, 0, 0, marker)
   end
@@ -87,6 +91,14 @@ defmodule Board do
       end
     else
       check_column_victory(board_values, board_side_length, 0, column_iterator + 1, marker)
+    end
+  end
+
+  def winner(board_values, board_side_length, marker_one, marker_two) do
+    cond do
+      check_for_victory(board_values, 3, marker_one) -> "X"
+      check_for_victory(board_values, 3, marker_two) -> "O"
+      true -> "Draw"
     end
   end
 end
