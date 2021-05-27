@@ -4,7 +4,7 @@ defmodule Board do
   end
 
   def make_move(current_board, move, marker) do
-    String.replace(current_board, move, marker)
+    String.replace(current_board, String.replace(move, "\n", ""), marker)
   end
 
   def game_over(board_values, marker) do
@@ -109,7 +109,7 @@ defmodule ConsoleInOut do
   end
 
   def read do
-    IO.gets "Enter a number to make your move: \n"
+    IO.gets "\nEnter a number to make your move: \n"
   end
 end
 
@@ -117,23 +117,37 @@ defmodule TicTacToeElixir do
   def start(in_out) do
     in_out.print greet()
     in_out.print explain_rules()
-    in_out.print Board.split_board("123456789")
-    in_out.print Board.winner(game_loop(true, "123456789", "X", "O", "X", 1), 3, "X", "O")
+    in_out.print Board.winner(game_loop(false, "123456789", "X", "O", "X", 1, in_out), 3, "X", "O")
   end
 
   defp not_max_turn(board_side_length, turn) do
     turn <= board_side_length * board_side_length
   end
 
-  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn) do
-    cond do
-      not_max_turn(3, turn) -> turn_logic(board_values, marker_one, marker_two, current_player, turn)
-      true -> board_values
+  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out) do
+    if game_is_over? do
+      in_out.print Board.split_board(board_values)
+      board_values
+    else
+      cond do
+        not_max_turn(3, turn) -> turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out)
+        true -> board_values
+      end
     end
   end
 
-  defp turn_logic(board_values, marker_one, marker_two, current_player, turn) do
-    game_loop(Board.game_over(board_values, current_player), board_values, marker_one, marker_two, current_player, turn + 1)
+  defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
+    in_out.print Board.split_board(board_values)
+    updated_board = Board.make_move(board_values, in_out.read(), current_player)
+    game_loop(Board.game_over(updated_board, current_player), updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
+  end
+
+  defp swap_player(marker_one, marker_two, current_player) do
+    if current_player == marker_one do
+      marker_two
+    else
+      marker_one
+    end
   end
 
   defp greet do
