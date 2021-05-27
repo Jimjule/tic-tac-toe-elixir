@@ -1,6 +1,6 @@
 defmodule DetectVictorTest do
   use ExUnit.Case
-  doctest TicTacToeElixir
+  doctest Board
 
   test "detects draw" do
     assert Board.there_is_a_winner?("XOXOXXOXO", 3, "X", "O") == false
@@ -11,14 +11,14 @@ defmodule DetectVictorTest do
   end
 
   test "detects player 1 victory" do
-    assert Board.winner("OXO4X67X9", 3, "X", "O") == "X"
+    assert Board.winner("OXO4X67X9", "X", "O") == "X"
   end
 
   test "detects player 2 victory" do
-    assert Board.winner("XX3OOO789", 3, "X", "O") == "O"
+    assert Board.winner("XX3OOO789", "X", "O") == "O"
   end
 
   test "winner function detects draw" do
-    assert Board.winner("XOXOXXOXO", 3, "X", "O") == "Draw"
+    assert Board.winner("XOXOXXOXO", "X", "O") == "Draw"
   end
 end

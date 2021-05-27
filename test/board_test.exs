@@ -1,6 +1,6 @@
 defmodule BoardTest do
   use ExUnit.Case
-  doctest TicTacToeElixir
+  doctest Board
 
   test "returns blank 3x3 board" do
     assert Board.split_board("123456789") == "123\n456\n789"

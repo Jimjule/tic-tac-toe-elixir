@@ -1,6 +1,6 @@
 defmodule RowVictoryTest do
   use ExUnit.Case
-  doctest TicTacToeElixir
+  doctest Board
 
   test "wins with a row" do
     assert Board.check_for_victory("XXXOO6789", 3, "X") == true

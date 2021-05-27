@@ -94,10 +94,10 @@ defmodule Board do
     end
   end
 
-  def winner(board_values, board_side_length, marker_one, marker_two) do
+  def winner(board_values, marker_one, marker_two) do
     cond do
-      check_for_victory(board_values, 3, marker_one) -> "X"
-      check_for_victory(board_values, 3, marker_two) -> "O"
+      check_for_victory(board_values, 3, marker_one) -> marker_one
+      check_for_victory(board_values, 3, marker_two) -> marker_two
       true -> "Draw"
     end
   end
@@ -117,7 +117,7 @@ defmodule TicTacToeElixir do
   def start(in_out) do
     in_out.print greet()
     in_out.print explain_rules()
-    in_out.print Board.winner(game_loop(false, "123456789", "X", "O", "X", 1, in_out), 3, "X", "O")
+    in_out.print Board.winner(game_loop(false, "123456789", "X", "O", "X", 1, in_out), "X", "O")
   end
 
   defp not_max_turn(board_side_length, turn) do

@@ -1,6 +1,6 @@
 defmodule ColumnVictoryTest do
   use ExUnit.Case
-  doctest TicTacToeElixir
+  doctest Board
 
   test "check for victory with a column" do
     assert Board.check_for_victory("XOOX56X89", 3, "X") == true

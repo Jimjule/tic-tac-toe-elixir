@@ -1,6 +1,6 @@
 defmodule DiagonalVictoryTest do
   use ExUnit.Case
-  doctest TicTacToeElixir
+  doctest Board
 
   test "check for diagonal victory" do
     assert Board.check_for_victory("XOO4X678X", 3, "X") == true
