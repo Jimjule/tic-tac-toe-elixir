@@ -18,6 +18,10 @@ defmodule BoardTest do
     assert Board.make_move("X23456789", "1", "O") == "X23456789"
   end
 
+  test "board marks a second square" do
+    assert Board.make_move("X234O6789", "5", "O") == "X234O6789"
+  end
+
   test "game is over when board is full without a victory" do
     assert Board.game_over("XOXXOOOXX", "X") == true
   end
