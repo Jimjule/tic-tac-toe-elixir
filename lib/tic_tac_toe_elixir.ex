@@ -7,8 +7,12 @@ defmodule Board do
     String.replace(current_board, String.replace(move, "\n", ""), marker)
   end
 
-  def game_over(board_values, marker) do
-    check_board_full(board_values) || check_for_victory(board_values, 3, marker)
+  def game_over(board_values, marker, turn, board_side_length\\ 3) do
+    check_board_full(board_values) or check_for_victory(board_values, 3, marker) or max_turn(turn, board_side_length)
+  end
+
+  defp max_turn(turn, board_side_length) do
+    turn > board_side_length * board_side_length
   end
 
   def check_board_full(board_values) do
@@ -120,26 +124,19 @@ defmodule TicTacToeElixir do
     game_loop(false, "123456789", "X", "O", "X", 1, in_out) |> Board.winner("X", "O") |> in_out.print
   end
 
-  defp not_max_turn(board_side_length, turn) do
-    turn <= board_side_length * board_side_length
-  end
-
   defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out) do
     if game_is_over? do
       in_out.print Board.split_board(board_values)
       board_values
     else
-      cond do
-        not_max_turn(3, turn) -> turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out)
-        true -> board_values
-      end
+      turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out)
     end
   end
 
   defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
     in_out.print Board.split_board(board_values)
     updated_board = Board.make_move(board_values, in_out.read(), current_player)
-    Board.game_over(updated_board, current_player) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
+    Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
   end
 
   defp swap_player(marker_one, marker_two, current_player) do
