@@ -22,6 +22,12 @@ defmodule BoardTest do
     assert Board.make_move("X234O6789", "5", "O") == "X234O6789"
   end
 
+  test "first spot AI logic works" do
+    board_values = "XOXXOOOX9"
+    move = String.replace(board_values, "X", "") |> String.replace("O", "") |> String.at(0)
+    assert Board.make_move("XOXXOOOX9", move, "X") == "XOXXOOOXX"
+  end
+
   test "game is over when board is full without a victory" do
     assert Board.game_over("XOXXOOOXX", "X", 1) == true
   end
