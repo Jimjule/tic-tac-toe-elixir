@@ -11,21 +11,19 @@ defmodule BoardTest do
   end
 
   test "board makes move if square available" do
-    assert Board.make_move("123456789", "1", "X") == "X23456789"
+    assert Board.make_move("1", "123456789", "X") == "X23456789"
   end
 
   test "board unchanged if square occupied" do
-    assert Board.make_move("X23456789", "1", "O") == "X23456789"
+    assert Board.make_move("1", "X23456789", "O") == "X23456789"
   end
 
   test "board marks a second square" do
-    assert Board.make_move("X234O6789", "5", "O") == "X234O6789"
+    assert Board.make_move("5", "X234O6789", "O") == "X234O6789"
   end
 
   test "first spot AI logic works" do
-    board_values = "XOXXOOOX9"
-    move = String.replace(board_values, "X", "") |> String.replace("O", "") |> String.at(0)
-    assert Board.make_move("XOXXOOOX9", move, "X") == "XOXXOOOXX"
+    assert "XOXXOOOX9" |> Board.calculate_first_empty_spot("X", "O") |> Board.make_move("XOXXOOOX9", "X") == "XOXXOOOXX"
   end
 
   test "game is over when board is full without a victory" do

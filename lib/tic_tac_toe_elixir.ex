@@ -3,8 +3,12 @@ defmodule Board do
     Regex.scan(~r/.../, board_values) |> Enum.join("\n")
   end
 
-  def make_move(current_board, move, marker) do
-    String.replace(current_board, String.replace(move, "\n", ""), marker)
+  def make_move(move, board_values, marker) do
+    String.replace(board_values, String.replace(move, "\n", ""), marker)
+  end
+
+  def calculate_first_empty_spot(board_values, marker_one, marker_two) do
+    String.replace(board_values, marker_one, "") |> String.replace(marker_two, "") |> String.at(0)
   end
 
   def game_over(board_values, marker, turn, board_side_length\\ 3) do
@@ -135,7 +139,7 @@ defmodule TicTacToeElixir do
 
   defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
     in_out.print Board.split_board(board_values)
-    updated_board = Board.make_move(board_values, in_out.read(), current_player)
+    updated_board = Board.make_move(in_out.read(), board_values, current_player)
     Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
   end
 
