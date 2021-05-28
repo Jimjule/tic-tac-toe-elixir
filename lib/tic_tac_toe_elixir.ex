@@ -4,15 +4,23 @@ defmodule Board do
   end
 
   def make_move(current_board, move, marker) do
-    String.replace(current_board, move, marker)
+    String.replace(current_board, String.replace(move, "\n", ""), marker)
   end
 
-  def game_over(board_values, marker) do
-    check_board_full(board_values) || check_for_victory(board_values, 3, marker)
+  def game_over(board_values, marker, turn, board_side_length\\ 3) do
+    check_board_full(board_values) or check_for_victory(board_values, 3, marker) or max_turn(turn, board_side_length)
+  end
+
+  defp max_turn(turn, board_side_length) do
+    turn > board_side_length * board_side_length
   end
 
   def check_board_full(board_values) do
     String.replace(board_values, "X", "") |> String.replace("O", "") |> String.length() == 0
+  end
+
+  def there_is_a_winner?(board_values, board_side_length, marker_one, marker_two) do
+    check_for_victory(board_values, board_side_length, marker_one) or check_for_victory(board_values, board_side_length, marker_two)
   end
 
   def check_for_victory(board_values, board_side_length, marker) do
@@ -89,6 +97,14 @@ defmodule Board do
       check_column_victory(board_values, board_side_length, 0, column_iterator + 1, marker)
     end
   end
+
+  def winner(board_values, marker_one, marker_two) do
+    cond do
+      check_for_victory(board_values, 3, marker_one) -> marker_one
+      check_for_victory(board_values, 3, marker_two) -> marker_two
+      true -> "Draw"
+    end
+  end
 end
 
 defmodule ConsoleInOut do
@@ -97,20 +113,38 @@ defmodule ConsoleInOut do
   end
 
   def read do
-    IO.gets "Enter a number to make your move: \n"
+    IO.gets "\nEnter a number to make your move: \n"
   end
 end
 
 defmodule TicTacToeElixir do
-  def start(in_out) do
+  def start(in_out\\ ConsoleInOut) do
     in_out.print greet()
     in_out.print explain_rules()
-    in_out.print Board.split_board("123456789")
+    game_loop(false, "123456789", "X", "O", "X", 1, in_out) |> Board.winner("X", "O") |> in_out.print
   end
 
-  defp game_loop(game_is_over?, board_values) do
+  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out) do
+    if game_is_over? do
+      in_out.print Board.split_board(board_values)
+      board_values
+    else
+      turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out)
+    end
+  end
 
-    game_loop(Board.game_over(board_values), board_values)
+  defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
+    in_out.print Board.split_board(board_values)
+    updated_board = Board.make_move(board_values, in_out.read(), current_player)
+    Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
+  end
+
+  defp swap_player(marker_one, marker_two, current_player) do
+    if current_player == marker_one do
+      marker_two
+    else
+      marker_one
+    end
   end
 
   defp greet do
@@ -121,5 +155,3 @@ defmodule TicTacToeElixir do
     "The first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
   end
 end
-
-TicTacToeElixir.start(ConsoleInOut)

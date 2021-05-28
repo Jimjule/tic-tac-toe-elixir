@@ -13,5 +13,10 @@ Run `mix test` in the project directory.
 
 ## Running the program
 
-Navigate to `/lib`
-Run `elixir ./lib/tic_tac_toe_elixir.ex`
+Run `mix run -e TicTacToeElixir.start`
+
+## Todo
+
+- Move validation
+- Trim game_over() check
+- Clearer result announcement
