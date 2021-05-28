@@ -122,25 +122,37 @@ defmodule ConsoleInOut do
 end
 
 defmodule TicTacToeElixir do
-  def start(in_out\\ ConsoleInOut) do
+  def start(human_player_two?\\ false, in_out\\ ConsoleInOut) do
     in_out.print greet()
     in_out.print explain_rules()
-    game_loop(false, "123456789", "X", "O", "X", 1, in_out) |> Board.winner("X", "O") |> in_out.print
+    game_loop(false, "123456789", "X", "O", "X", 1, in_out, human_player_two?) |> Board.winner("X", "O") |> in_out.print
   end
 
-  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out) do
+  defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out, human_player_two?) do
     if game_is_over? do
       in_out.print Board.split_board(board_values)
       board_values
     else
-      turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out)
+      turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out, human_player_two?)
     end
   end
 
-  defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out) do
+  defp turn_logic(board_values, marker_one, marker_two, current_player, turn, in_out, human_player_two?) do
     in_out.print Board.split_board(board_values)
-    updated_board = Board.make_move(in_out.read(), board_values, current_player)
-    Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out)
+    updated_board = get_move(board_values, in_out, marker_one, marker_two, current_player, human_player_two?) |> Board.make_move(board_values, current_player)
+    Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, marker_two, swap_player(marker_one, marker_two, current_player), turn + 1, in_out, human_player_two?)
+  end
+
+  defp get_move(board_values, in_out, marker_one, marker_two, current_player, human_player_two) do
+    cond do
+      current_player == marker_two and human_player_two != true -> handle_computer_player_turn(board_values, in_out, marker_one, marker_two)
+      true -> in_out.read()
+    end
+  end
+
+  defp handle_computer_player_turn(board_values, in_out, marker_one, marker_two) do
+    in_out.print "\nComputer's move\n"
+    Board.calculate_first_empty_spot(board_values, marker_one, marker_two)
   end
 
   defp swap_player(marker_one, marker_two, current_player) do
