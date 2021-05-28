@@ -117,7 +117,7 @@ defmodule ConsoleInOut do
   end
 
   def read do
-    IO.gets "\nEnter a number to make your move: \n"
+    IO.gets "\nEnter a number to make your move: "
   end
 end
 
