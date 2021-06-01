@@ -125,7 +125,7 @@ defmodule TicTacToeElixir do
   def start(human_player_two?\\ false, in_out\\ ConsoleInOut) do
     in_out.print greet()
     in_out.print explain_rules()
-    game_loop(false, "123456789", "X", "O", "X", 1, in_out, human_player_two?) |> Board.winner("X", "O") |> in_out.print
+    game_loop(false, "123456789", "X", "O", "X", 1, in_out, human_player_two?) |> Board.winner("X", "A", "O", "B") |> in_out.print
   end
 
   defp game_loop(game_is_over?, board_values, marker_one, marker_two, current_player, turn, in_out, human_player_two?) do
