@@ -10,15 +10,15 @@ defmodule DetectVictorTest do
     assert Board.there_is_a_winner?("XX3OOO789", 3, "X", "O") == true
   end
 
-  test "detects player 1 victory" do
-    assert Board.winner("OXO4X67X9", "X", "O") == "X"
+  test "declares X is the winner" do
+    assert Board.winner("XXXOO6789", "X", "Y", "O", "U") == "Y"
   end
 
-  test "detects player 2 victory" do
-    assert Board.winner("XX3OOO789", "X", "O") == "O"
+  test "declares O is the winner" do
+    assert Board.winner("123XX6OOO", "X", "Y", "O", "U") == "U"
   end
 
   test "winner function detects draw" do
-    assert Board.winner("XOXOXXOXO", "X", "O") == "Draw"
+    assert Board.winner("XOXOXXOXO", "X", "X", "O", "O") == "Draw"
   end
 end

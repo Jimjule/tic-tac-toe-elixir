@@ -49,12 +49,4 @@ defmodule BoardTest do
   test "is not checked when iterator is under 3" do
     assert Board.is_checked?(3, 2) == false
   end
-
-  test "declares X is the winner" do
-    assert Board.winner("XXXOO6789", "X", "O") == "X"
-  end
-
-  test "declares O is the winner" do
-    assert Board.winner("123XX6OOO", "X", "O") == "O"
-  end
 end

@@ -102,10 +102,10 @@ defmodule Board do
     end
   end
 
-  def winner(board_values, marker_one, marker_two) do
+  def winner(board_values, marker_one, player_one_name, marker_two, player_two_name) do
     cond do
-      check_for_victory(board_values, 3, marker_one) -> marker_one
-      check_for_victory(board_values, 3, marker_two) -> marker_two
+      check_for_victory(board_values, 3, marker_one) -> player_one_name
+      check_for_victory(board_values, 3, marker_two) -> player_two_name
       true -> "Draw"
     end
   end
