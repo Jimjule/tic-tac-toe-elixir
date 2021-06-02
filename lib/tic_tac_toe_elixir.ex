@@ -1,3 +1,14 @@
+defmodule Database do
+  def connect() do
+    TicTacToeElixir.Repo.start_link()
+    "\nDatabase: Started Link"
+  end
+
+  def getAllRecords() do
+    TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.all
+  end
+end
+
 defmodule Board do
   def split_board(board_values) do
     Regex.scan(~r/.../, board_values) |> Enum.join("\n")
@@ -123,6 +134,10 @@ end
 
 defmodule TicTacToeElixir do
   def start(human_player_two?\\ false, in_out\\ ConsoleInOut) do
+    in_out.print Database.connect()
+    game_history = Database.getAllRecords()
+    in_out.print "Number of games in history: "
+    in_out.print length(game_history)
     in_out.print greet()
     in_out.print explain_rules()
     player_one_name = "A"
