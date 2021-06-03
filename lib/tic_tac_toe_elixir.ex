@@ -141,13 +141,6 @@ defmodule TicTacToeElixir do
     in_out.print Database.connect()
     game_history = Database.get_all_records()
     in_out.print "Number of games in history: #{length(game_history)}"
-    first = Enum.at(game_history, 0)
-    p1 = Map.get(first, :player_one_name)
-    p2 = Map.get(first, :player_two_name)
-    board =  Map.get(first, :board_state)
-    in_out.print "Player One Name: #{p1}"
-    in_out.print "Player Two Name: #{p2}"
-    in_out.print "Final Board: #{board}"
 
     in_out.print greet()
     in_out.print explain_rules()
