@@ -231,9 +231,9 @@ defmodule TicTacToeElixir do
 
   def format_game_history(in_out, record) do
     in_out.print "---Game Record---"
-    "P1 Name: #{Map.get(record, :player_one_name) |> in_out.print}"
-    "P2 Name: #{Map.get(record, :player_two_name) |> in_out.print}"
-    "Board: #{Map.get(record, :updated_at) |> in_out.print}"
+    "P1 Name: #{record.player_one_name}" |> in_out.print
+    "P2 Name: #{record.player_two_name}" |> in_out.print
+    "Date: #{record.updated_at}" |> in_out.print
   end
 
   defp greet do
