@@ -7,6 +7,10 @@ defmodule Database do
   def get_all_records() do
     TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.all
   end
+
+  def get_record_by_id(id) do
+    TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.get(id)
+  end
 end
 
 defmodule Board do
@@ -206,28 +210,41 @@ defmodule TicTacToeElixir do
   end
 
   defp game_history_menu(in_out, human_player_two?) do
-    case in_out.read_input("\nEnter a number to choose:\n1. Select a game to view\n2. Return to main menu\n3. Quit\n") |> String.replace("\n", "") do
+    case in_out.read_input("\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Return to main menu\n4. Quit\n") |> String.replace("\n", "") do
       "1" -> view_game_history(in_out, human_player_two?)
-      "2" -> menu(in_out, human_player_two?)
+      "2" -> view_specific_game(in_out, human_player_two?)
+      "3" -> menu(in_out, human_player_two?)
       _default -> true
     end
   end
 
   defp view_game_history(in_out, human_player_two?) do
-    format_game_loop(in_out, Database.get_all_records())
-    in_out.print "\n---Select one of these games or return---\n"
+    format_game_loop(Database.get_all_records(), in_out)
+    game_history_menu(in_out, human_player_two?)
   end
 
-  def format_game_loop(in_out, records) do
-    Enum.map(records, fn(record) -> format_game_history(in_out, record) end)
+  defp view_specific_game(in_out, human_player_two?) do
+    in_out.read_input("\n---Enter the ID of a game to view---\n") |> String.replace("\n", "") |> Database.get_record_by_id |> format_game_display(in_out)
   end
 
-  def format_game_history(in_out, record) do
+  def format_game_loop(records, in_out) do
+    Enum.map(records, fn(record) -> format_game_history(record, in_out) end)
+  end
+
+  def format_game_history(record, in_out) do
     in_out.print "\n---Game Record---"
     "Game ID: #{record.id}" |> in_out.print
     "P1 Name: #{record.player_one_name}" |> in_out.print
     "P2 Name: #{record.player_two_name}" |> in_out.print
     "Date: #{record.updated_at}" |> in_out.print
+  end
+
+  defp format_game_display(record, in_out) do
+    "For game #{record.id}:" |> in_out.print
+    "P1 Name: #{record.player_one_name}" |> in_out.print
+    "P2 Name: #{record.player_two_name}" |> in_out.print
+    "Date: #{record.updated_at}" |> in_out.print
+    "Final Board: #{record.board_state}" |> in_out.print
   end
 
   defp greet do
