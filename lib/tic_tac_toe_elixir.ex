@@ -4,7 +4,7 @@ defmodule Database do
     "\nDatabase: Started Link"
   end
 
-  def getAllRecords() do
+  def get_all_records() do
     TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.all
   end
 end
@@ -139,7 +139,7 @@ end
 defmodule TicTacToeElixir do
   def start(human_player_two?\\ false, in_out\\ ConsoleInOut) do
     in_out.print Database.connect()
-    game_history = Database.getAllRecords()
+    game_history = Database.get_all_records()
     in_out.print "Number of games in history: #{length(game_history)}"
     first = Enum.at(game_history, 0)
     p1 = Map.get(first, :player_one_name)
@@ -167,18 +167,6 @@ defmodule TicTacToeElixir do
     player_one_name = "A"
     player_two_name = get_player_two_name(human_player_two?)
     game_loop(false, "123456789", "X", "A", "O", player_two_name, "X", 1, in_out, human_player_two?) |> Board.winner("X", player_one_name, "O", player_two_name) |> in_out.print
-  end
-
-  defp game_history_menu(in_out, human_player_two?) do
-    case in_out.read_input("Enter a number to choose:\n1. Select a game to view\n2. Return to main menu\n3. Quit\n") |> String.replace("\n", "") do
-      "1" -> view_game_history(in_out, human_player_two?)
-      "2" -> menu(in_out, human_player_two?)
-      _default -> true
-    end
-  end
-
-  defp view_game_history(in_out, human_player_two?) do
-
   end
 
   defp game_loop(game_is_over?, board_values, marker_one, player_one_name, marker_two, player_two_name, current_player, turn, in_out, human_player_two?) do
@@ -222,6 +210,30 @@ defmodule TicTacToeElixir do
     else
       marker_one
     end
+  end
+
+  defp game_history_menu(in_out, human_player_two?) do
+    case in_out.read_input("\nEnter a number to choose:\n1. Select a game to view\n2. Return to main menu\n3. Quit\n") |> String.replace("\n", "") do
+      "1" -> view_game_history(in_out, human_player_two?)
+      "2" -> menu(in_out, human_player_two?)
+      _default -> true
+    end
+  end
+
+  defp view_game_history(in_out, human_player_two?) do
+    format_game_loop(in_out, Database.get_all_records())
+    in_out.print "---Select one of these games or return---"
+  end
+
+  def format_game_loop(in_out, records) do
+    Enum.map(records, fn(record) -> format_game_history(in_out, record) end)
+  end
+
+  def format_game_history(in_out, record) do
+    in_out.print "---Game Record---"
+    "P1 Name: #{Map.get(record, :player_one_name) |> in_out.print}"
+    "P2 Name: #{Map.get(record, :player_two_name) |> in_out.print}"
+    "Board: #{Map.get(record, :updated_at) |> in_out.print}"
   end
 
   defp greet do
