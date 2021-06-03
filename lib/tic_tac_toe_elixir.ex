@@ -222,7 +222,7 @@ defmodule TicTacToeElixir do
 
   defp view_game_history(in_out, human_player_two?) do
     format_game_loop(in_out, Database.get_all_records())
-    in_out.print "---Select one of these games or return---"
+    in_out.print "\n---Select one of these games or return---\n"
   end
 
   def format_game_loop(in_out, records) do
@@ -230,7 +230,7 @@ defmodule TicTacToeElixir do
   end
 
   def format_game_history(in_out, record) do
-    in_out.print "---Game Record---"
+    in_out.print "\n---Game Record---"
     "P1 Name: #{record.player_one_name}" |> in_out.print
     "P2 Name: #{record.player_two_name}" |> in_out.print
     "Date: #{record.updated_at}" |> in_out.print
