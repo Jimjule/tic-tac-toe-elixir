@@ -4,8 +4,12 @@ defmodule Database do
     "\nDatabase: Started Link"
   end
 
-  def getAllRecords() do
+  def get_all_records() do
     TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.all
+  end
+
+  def get_record_by_id(id) do
+    TicTacToeElixir.Ttt_record |> TicTacToeElixir.Repo.get(id)
   end
 end
 
@@ -139,15 +143,8 @@ end
 defmodule TicTacToeElixir do
   def start(human_player_two?\\ false, in_out\\ ConsoleInOut) do
     in_out.print Database.connect()
-    game_history = Database.getAllRecords()
+    game_history = Database.get_all_records()
     in_out.print "Number of games in history: #{length(game_history)}"
-    first = Enum.at(game_history, 0)
-    p1 = Map.get(first, :player_one_name)
-    p2 = Map.get(first, :player_two_name)
-    board =  Map.get(first, :board_state)
-    in_out.print "Player One Name: #{p1}"
-    in_out.print "Player Two Name: #{p2}"
-    in_out.print "Final Board: #{board}"
 
     in_out.print greet()
     in_out.print explain_rules()
@@ -167,18 +164,6 @@ defmodule TicTacToeElixir do
     player_one_name = "A"
     player_two_name = get_player_two_name(human_player_two?)
     game_loop(false, "123456789", "X", "A", "O", player_two_name, "X", 1, in_out, human_player_two?) |> Board.winner("X", player_one_name, "O", player_two_name) |> in_out.print
-  end
-
-  defp game_history_menu(in_out, human_player_two?) do
-    case in_out.read_input("Enter a number to choose:\n1. Select a game to view\n2. Return to main menu\n3. Quit\n") |> String.replace("\n", "") do
-      "1" -> view_game_history(in_out, human_player_two?)
-      "2" -> menu(in_out, human_player_two?)
-      _default -> true
-    end
-  end
-
-  defp view_game_history(in_out, human_player_two?) do
-
   end
 
   defp game_loop(game_is_over?, board_values, marker_one, player_one_name, marker_two, player_two_name, current_player, turn, in_out, human_player_two?) do
@@ -222,6 +207,44 @@ defmodule TicTacToeElixir do
     else
       marker_one
     end
+  end
+
+  defp game_history_menu(in_out, human_player_two?) do
+    case in_out.read_input("\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Return to main menu\n4. Quit\n") |> String.replace("\n", "") do
+      "1" -> view_game_history(in_out, human_player_two?)
+      "2" -> view_specific_game(in_out, human_player_two?)
+      "3" -> menu(in_out, human_player_two?)
+      _default -> true
+    end
+  end
+
+  defp view_game_history(in_out, human_player_two?) do
+    format_game_loop(Database.get_all_records(), in_out)
+    game_history_menu(in_out, human_player_two?)
+  end
+
+  defp view_specific_game(in_out, human_player_two?) do
+    in_out.read_input("\n---Enter the ID of a game to view---\n") |> String.replace("\n", "") |> Database.get_record_by_id |> format_game_display(in_out)
+  end
+
+  def format_game_loop(records, in_out) do
+    Enum.map(records, fn(record) -> format_game_history(record, in_out) end)
+  end
+
+  def format_game_history(record, in_out) do
+    in_out.print "\n---Game Record---"
+    "Game ID: #{record.id}" |> in_out.print
+    "P1 Name: #{record.player_one_name}" |> in_out.print
+    "P2 Name: #{record.player_two_name}" |> in_out.print
+    "Date: #{record.updated_at}" |> in_out.print
+  end
+
+  defp format_game_display(record, in_out) do
+    "For game #{record.id}:" |> in_out.print
+    "P1 Name: #{record.player_one_name}" |> in_out.print
+    "P2 Name: #{record.player_two_name}" |> in_out.print
+    "Date: #{record.updated_at}" |> in_out.print
+    "Final Board: #{record.board_state}" |> in_out.print
   end
 
   defp greet do
