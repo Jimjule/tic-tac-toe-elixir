@@ -15,6 +15,6 @@ defmodule Database do
   end
 
   def get_records_by_player_name(name) do
-    TicTacToeElixir.Ttt_record |> Ecto.Query.where(player_one_name: ^name) |> TicTacToeElixir.Repo.all
+    TicTacToeElixir.Ttt_record |> Ecto.Query.where(player_one_name: ^name) |> or_where(player_two_name: ^name) |> TicTacToeElixir.Repo.all
   end
 end
