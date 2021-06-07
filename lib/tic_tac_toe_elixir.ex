@@ -25,9 +25,7 @@ defmodule TicTacToeElixir do
     game_loop(false, "123456789", player_one_name, player_one_name, player_two_marker, player_two_name, player_one_name, 1, in_out, human_player_two?) |> Board.winner(player_one_name, player_one_name, player_two_name, player_two_marker) |> in_out.print
   end
 
-  defp is_player_two_human?(in_out) do
-    in_out.read_input("\nIs player two human? (Y/n)\n") |> String.replace("\n", "") |> String.match?(~r/y/i)
-  end
+  defp is_player_two_human?(in_out), do: in_out.read_input("\nIs player two human? (Y/n)\n") |> String.replace("\n", "") |> String.match?(~r/y/i)
 
   defp game_loop(game_is_over?, board_values, marker_one, player_one_name, marker_two, player_two_name, current_player, turn, in_out, human_player_two?) do
     if game_is_over? do
@@ -54,9 +52,7 @@ defmodule TicTacToeElixir do
     end
   end
 
-  defp get_player_name(in_out, which_player) do
-    in_out.read_input("\nPlease enter player #{which_player} name & marker (single letter):\n") |> String.replace("\n", "")
-  end
+  defp get_player_name(in_out, which_player), do: in_out.read_input("\nPlease enter player #{which_player} name & marker (single letter):\n") |> String.replace("\n", "")
 
   defp turn_logic(board_values, marker_one, player_one_name, marker_two, player_two_name, current_player, turn, in_out, human_player_two?) do
     in_out.print Board.split_board(board_values)
@@ -109,9 +105,7 @@ defmodule TicTacToeElixir do
     game_history_menu(in_out)
   end
 
-  def format_game_loop(records, in_out) do
-    Enum.map(records, fn(record) -> format_game_history(record, in_out) end)
-  end
+  def format_game_loop(records, in_out), do: Enum.map(records, fn(record) -> format_game_history(record, in_out) end)
 
   def format_game_history(record, in_out) do
     in_out.print "\n---Game Record---"
@@ -129,11 +123,7 @@ defmodule TicTacToeElixir do
     "Final Board:\n#{Board.split_board(record.board_state)}\n" |> in_out.print
   end
 
-  defp greet do
-    "\n===Welcome to TicTacToe - Elixir Edition!===\n"
-  end
+  defp greet, do: "\n===Welcome to TicTacToe - Elixir Edition!===\n"
 
-  defp explain_rules do
-    "The first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
-  end
+  defp explain_rules, do: "The first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
 end
