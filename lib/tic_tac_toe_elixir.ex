@@ -19,9 +19,10 @@ defmodule TicTacToeElixir do
   end
 
   defp set_up_game(in_out, human_player_two?) do
-    player_one_name = "A"
-    player_two_name = get_player_two_name(human_player_two?)
-    game_loop(false, "123456789", "X", "A", "O", player_two_name, "X", 1, in_out, human_player_two?) |> Board.winner("X", player_one_name, "O", player_two_name) |> in_out.print
+    player_one_name = get_player_name(in_out, "1")
+    player_two_name = get_player_two_name(in_out, human_player_two?)
+    player_two_marker = get_player_two_marker(human_player_two?, player_two_name)
+    game_loop(false, "123456789", player_one_name, player_one_name, player_two_marker, player_two_name, player_one_name, 1, in_out, human_player_two?) |> Board.winner(player_one_name, player_one_name, player_two_name, player_two_marker) |> in_out.print
   end
 
   defp is_player_two_human?(in_out) do
@@ -37,18 +38,30 @@ defmodule TicTacToeElixir do
     end
   end
 
-  defp get_player_two_name(human_player_two?) do
+  defp get_player_two_name(in_out, human_player_two?) do
     if human_player_two? do
-      "O"
+      get_player_name(in_out, "2")
     else
       "CPU"
     end
   end
 
+  defp get_player_two_marker(human_player_two?, player_two_name) do
+    if human_player_two? do
+      player_two_name
+    else
+      "O"
+    end
+  end
+
+  defp get_player_name(in_out, which_player) do
+    in_out.read_input("\nPlease enter player #{which_player} name & marker (single letter):\n") |> String.replace("\n", "")
+  end
+
   defp turn_logic(board_values, marker_one, player_one_name, marker_two, player_two_name, current_player, turn, in_out, human_player_two?) do
     in_out.print Board.split_board(board_values)
     updated_board = get_move(board_values, in_out, marker_one, marker_two, current_player, human_player_two?) |> Board.make_move(board_values, current_player)
-    Board.game_over(updated_board, current_player, turn) |> game_loop(updated_board, marker_one, player_one_name, marker_two, player_two_name, swap_player(marker_one, marker_two, current_player), turn + 1, in_out, human_player_two?)
+    Board.game_over(updated_board, marker_one, marker_two, current_player, turn) |> game_loop(updated_board, marker_one, player_one_name, marker_two, player_two_name, swap_player(marker_one, marker_two, current_player), turn + 1, in_out, human_player_two?)
   end
 
   defp get_move(board_values, in_out, marker_one, marker_two, current_player, human_player_two) do

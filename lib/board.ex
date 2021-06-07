@@ -11,16 +11,16 @@ defmodule Board do
     String.replace(board_values, marker_one, "") |> String.replace(marker_two, "") |> String.at(0)
   end
 
-  def game_over(board_values, marker, turn, board_side_length\\ 3) do
-    check_board_full(board_values) or check_for_victory(board_values, 3, marker) or max_turn(turn, board_side_length)
+  def game_over(board_values, marker_one, marker_two, current_marker, turn, board_side_length\\ 3) do
+    check_board_full(board_values, marker_one, marker_two) or check_for_victory(board_values, 3, current_marker) or max_turn(turn, board_side_length)
   end
 
   defp max_turn(turn, board_side_length) do
     turn > board_side_length * board_side_length
   end
 
-  def check_board_full(board_values) do
-    String.replace(board_values, "X", "") |> String.replace("O", "") |> String.length() == 0
+  def check_board_full(board_values, player_one_marker, player_two_marker) do
+    String.replace(board_values, player_one_marker, "") |> String.replace(player_two_marker, "") |> String.length() == 0
   end
 
   def there_is_a_winner?(board_values, board_side_length, marker_one, marker_two) do
@@ -102,7 +102,7 @@ defmodule Board do
     end
   end
 
-  def winner(board_values, marker_one, player_one_name, marker_two, player_two_name) do
+  def winner(board_values, player_one_name, marker_one, player_two_name, marker_two) do
     cond do
       check_for_victory(board_values, 3, marker_one) -> player_one_name
       check_for_victory(board_values, 3, marker_two) -> player_two_name
