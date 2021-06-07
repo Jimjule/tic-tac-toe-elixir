@@ -11,14 +11,20 @@ defmodule DetectVictorTest do
   end
 
   test "declares X is the winner" do
-    assert Board.winner("XXXOO6789", "X", "X", "CPU", "O") == "X"
+    player_one = %Player{name: "X", marker: "X"}
+    player_two = %Player{name: "CPU", marker: "O"}
+    assert Board.winner("XXXOO6789", player_one, player_two) == "X"
   end
 
   test "declares O is the winner" do
-    assert Board.winner("123XX6YYY", "X", "X", "CPU", "Y") == "CPU"
+    player_one = %Player{name: "X", marker: "X"}
+    player_two = %Player{name: "CPU", marker: "Y"}
+    assert Board.winner("123XX6YYY", player_one, player_two) == "CPU"
   end
 
   test "winner function detects draw" do
-    assert Board.winner("XOXOXXOXO", "X", "X", "O", "O") == "Draw"
+    player_one = %Player{name: "X", marker: "X"}
+    player_two = %Player{name: "CPU", marker: "O"}
+    assert Board.winner("XOXOXXOXO", player_one, player_two) == "Draw"
   end
 end
