@@ -1,5 +1,6 @@
 defmodule TicTacToeElixir do
   def start(in_out\\ ConsoleInOut) do
+    Logger.configure(level: :notice)
     in_out.print Database.connect()
     game_history = Database.get_all_records()
     in_out.print "Number of games in history: #{length(game_history)}"
