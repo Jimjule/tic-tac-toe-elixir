@@ -68,10 +68,11 @@ defmodule TicTacToeElixir do
   end
 
   defp game_history_menu(in_out, human_player_two?) do
-    case in_out.read_input("\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Return to main menu\n4. Quit\n") |> String.replace("\n", "") do
+    case in_out.read_input("\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Search games by player name\n4. Return to main menu\n5. Quit\n") |> String.replace("\n", "") do
       "1" -> view_game_history(in_out, human_player_two?)
       "2" -> view_specific_game(in_out, human_player_two?)
-      "3" -> menu(in_out, human_player_two?)
+      "3" -> search_games_by_player_name(in_out, human_player_two?)
+      "4" -> menu(in_out, human_player_two?)
       _default -> true
     end
   end
@@ -81,8 +82,14 @@ defmodule TicTacToeElixir do
     game_history_menu(in_out, human_player_two?)
   end
 
-  defp view_specific_game(in_out, _human_player_two?) do
+  defp view_specific_game(in_out, human_player_two?) do
     in_out.read_input("\n---Enter the ID of a game to view---\n") |> String.replace("\n", "") |> Database.get_record_by_id |> format_game_display(in_out)
+    game_history_menu(in_out, human_player_two?)
+  end
+
+  defp search_games_by_player_name(in_out, human_player_two?) do
+    in_out.read_input("\n---Enter the name of a player to search---\n") |> String.replace("\n", "") |> Database.get_records_by_player_name |> format_game_loop(in_out)
+    game_history_menu(in_out, human_player_two?)
   end
 
   def format_game_loop(records, in_out) do
