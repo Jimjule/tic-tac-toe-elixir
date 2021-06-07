@@ -81,7 +81,7 @@ defmodule TicTacToeElixir do
     game_history_menu(in_out, human_player_two?)
   end
 
-  defp view_specific_game(in_out, human_player_two?) do
+  defp view_specific_game(in_out, _human_player_two?) do
     in_out.read_input("\n---Enter the ID of a game to view---\n") |> String.replace("\n", "") |> Database.get_record_by_id |> format_game_display(in_out)
   end
 
@@ -98,11 +98,11 @@ defmodule TicTacToeElixir do
   end
 
   defp format_game_display(record, in_out) do
-    "For game #{record.id}:" |> in_out.print
+    "---Game #{record.id}---" |> in_out.print
     "P1 Name: #{record.player_one_name}" |> in_out.print
     "P2 Name: #{record.player_two_name}" |> in_out.print
     "Date: #{record.updated_at}" |> in_out.print
-    "Final Board: #{record.board_state}" |> in_out.print
+    "Final Board:\n#{Board.split_board(record.board_state)}\n" |> in_out.print
   end
 
   defp greet do
