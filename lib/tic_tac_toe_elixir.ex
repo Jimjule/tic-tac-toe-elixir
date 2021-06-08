@@ -20,13 +20,16 @@ defmodule TicTacToeElixir do
   end
 
   defp set_up_game(in_out) do
-    player_one_name = get_player_name(in_out, true, "1", "X")
-    player_one_marker = get_player_marker(in_out, "X", true)
-    player_one = %Player{name: player_one_name, marker: player_one_marker}
+    player_one = %Player{
+      name: get_player_name(in_out, true, "1", "X"),
+      marker: get_player_marker(in_out, "X", true)
+    }
     human_player_two? = is_player_two_human?(in_out)
-    player_two_name = get_player_name(in_out, human_player_two?, "2", "CPU")
-    player_two_marker = get_player_marker(in_out, "O", human_player_two?)
-    player_two = %Player{human?: human_player_two?, name: player_two_name, marker: player_two_marker}
+    player_two = %Player{
+      human?: human_player_two?,
+      name: get_player_name(in_out, human_player_two?, "2", "CPU"),
+      marker: get_player_marker(in_out, "O", human_player_two?)
+    }
     game_loop(false, "123456789", player_one, player_two, player_one.marker, 1, in_out) |> Board.winner(player_one, player_two) |> in_out.print
   end
 
