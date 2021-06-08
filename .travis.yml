@@ -5,4 +5,10 @@ before_install:
   - rm -rf ~/.mix/ ; mix local.hex --force ; mix local.rebar --force
   - mix deps.get
   - mix ecto.create
-
+services:
+  - postgresql
+addons:
+  postgresql: "11.2"
+env:
+  global:
+    - PGPORT=5432
