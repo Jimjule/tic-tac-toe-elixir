@@ -13,7 +13,7 @@ defmodule TicTacToeElixir do
   end
 
   defp menu(in_out) do
-    case in_out.read_input("Enter a number to choose:\n1. Play a game\n2. View game history\n3. Quit\n") |> String.replace("\n", "") do
+    case "Enter a number to choose:\n1. Play a game\n2. View game history\n3. Quit\n" |> in_out.read_input do
       "1" -> set_up_game(in_out)
       "2" -> game_history_menu(in_out)
       _default -> true
@@ -63,14 +63,16 @@ defmodule TicTacToeElixir do
 
   defp turn_logic(board_values, player_one, player_two, current_player_marker, turn, in_out) do
     in_out.print Board.split_board(board_values)
-    updated_board = get_move(board_values, in_out, player_one, player_two, current_player_marker) |> Board.make_move(board_values, current_player_marker)
-    Board.game_over(updated_board, player_one.marker, player_two.marker, current_player_marker, turn) |> game_loop(updated_board, player_one, player_two, swap_player(player_one.marker, player_two.marker, current_player_marker), turn + 1, in_out)
+    updated_board = get_move(board_values, in_out, player_one, player_two, current_player_marker)
+      |> Board.make_move(board_values, current_player_marker)
+    Board.game_over(updated_board, player_one.marker, player_two.marker, current_player_marker, turn)
+      |> game_loop(updated_board, player_one, player_two, swap_player(player_one.marker, player_two.marker, current_player_marker), turn + 1, in_out)
   end
 
   defp get_move(board_values, in_out, player_one, player_two, current_player) do
     cond do
       current_player == player_two.marker and player_two.human? != true -> handle_computer_player_turn(board_values, in_out, player_one.marker, player_two.marker)
-      true -> in_out.read_input("\nEnter a number to make your move: ")
+      true -> "\nEnter a number to make your move: " |> in_out.read_input
     end
   end
 
@@ -88,7 +90,7 @@ defmodule TicTacToeElixir do
   end
 
   defp game_history_menu(in_out) do
-    case in_out.read_input("\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Search games by player name\n4. Return to main menu\n5. Quit\n") do
+    case "\nEnter a number to choose:\n1. View list of games\n2. View a game by ID\n3. Search games by player name\n4. Return to main menu\n5. Quit\n" |> in_out.read_input do
       "1" -> view_game_history(in_out)
       "2" -> view_specific_game(in_out)
       "3" -> search_games_by_player_name(in_out)
