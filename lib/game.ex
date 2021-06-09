@@ -18,7 +18,7 @@ defmodule Game do
 
   defp get_move(board_values, in_out, player_one, player_two, current_player) do
     cond do
-      current_player == player_two.marker and player_two.human? != true -> handle_computer_player_turn(board_values, in_out, player_one.marker, player_two.marker)
+      current_player == player_two.marker and !player_two.human? -> handle_computer_player_turn(board_values, in_out, player_one.marker, player_two.marker)
       true -> "\nEnter a number to make your move: " |> in_out.read_input
     end
   end
