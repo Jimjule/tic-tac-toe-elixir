@@ -12,6 +12,10 @@ defmodule TicTacToeElixir do
     menu(in_out)
   end
 
+  defp greet, do: "\n===Welcome to TicTacToe - Elixir Edition!===\n"
+
+  defp explain_rules, do: "\nThe first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
+
   defp menu(in_out) do
     case "Enter a number to choose:\n1. Play a game\n2. View game history\n3. Quit\n" |> in_out.read_input do
       "1" -> set_up_game(in_out)
@@ -34,8 +38,6 @@ defmodule TicTacToeElixir do
     Game.game_loop(false, "123456789", player_one, player_two, player_one.marker, 1, in_out) |> Board.winner(player_one, player_two) |> in_out.print
   end
 
-  defp is_player_two_human?(in_out), do: "\nIs player two human? (y/N)\n" |> in_out.read_input |> String.match?(~r/y/i)
-
   defp get_player_marker(in_out, default_marker, human?) do
     if human? do
       "\nPlease enter your marker (1 letter): \n" |> in_out.read_input
@@ -43,6 +45,8 @@ defmodule TicTacToeElixir do
       default_marker
     end
   end
+
+  defp is_player_two_human?(in_out), do: "\nIs player two human? (y/N)\n" |> in_out.read_input |> String.match?(~r/y/i)
 
   defp get_player_name(in_out, human?, which_player, default) do
     if human? do
@@ -79,14 +83,6 @@ defmodule TicTacToeElixir do
 
   def format_game_loop(records, in_out), do: Enum.map(records, fn(record) -> format_game_history(record, in_out) end)
 
-  def format_game_history(record, in_out) do
-    "\n---Game Record---" |> in_out.print
-    "Game ID: #{record.id}" |> in_out.print
-    "P1 Name: #{record.player_one_name}" |> in_out.print
-    "P2 Name: #{record.player_two_name}" |> in_out.print
-    "Date: #{record.updated_at}" |> in_out.print
-  end
-
   defp format_game_display(record, in_out) do
     "---Game #{record.id}---" |> in_out.print
     "P1 Name: #{record.player_one_name}" |> in_out.print
@@ -95,7 +91,11 @@ defmodule TicTacToeElixir do
     "Final Board:\n#{Board.split_board(record.board_state)}\n" |> in_out.print
   end
 
-  defp greet, do: "\n===Welcome to TicTacToe - Elixir Edition!===\n"
-
-  defp explain_rules, do: "\nThe first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
+  def format_game_history(record, in_out) do
+    "\n---Game Record---" |> in_out.print
+    "Game ID: #{record.id}" |> in_out.print
+    "P1 Name: #{record.player_one_name}" |> in_out.print
+    "P2 Name: #{record.player_two_name}" |> in_out.print
+    "Date: #{record.updated_at}" |> in_out.print
+  end
 end
