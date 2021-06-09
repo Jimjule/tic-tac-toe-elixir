@@ -1,5 +1,18 @@
 language: elixir
+
 elixir: 1.10.4
+
 otp_release: 23.0
+
+services:
+  - postgresql
+
+env:
+  - MIX_ENV=test
+
 before_install:
   - rm -rf ~/.mix/ ; mix local.hex --force ; mix local.rebar --force
+  - mix deps.get
+  - psql -c 'create database tic_tac_toe_elixir_test;' -U postgres
+  - cp config/travis.exs config/test.exs
+  - mix do ecto.create, ecto.migrate
