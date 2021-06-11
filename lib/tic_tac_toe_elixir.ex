@@ -33,16 +33,24 @@ defmodule TicTacToeElixir do
     player_two = %Player{
       human?: human_player_two?,
       name: get_player_name(in_out, human_player_two?, "2", "CPU"),
-      marker: get_player_marker(in_out, "O", human_player_two?)
+      marker: get_player_marker(in_out, "O", human_player_two?, player_one.marker)
     }
     Game.game_loop(false, "123456789", player_one, player_two, player_one.marker, 1, in_out) |> Board.winner(player_one, player_two) |> in_out.print
   end
 
-  defp get_player_marker(in_out, default_marker, human?) do
+  defp get_player_marker(in_out, default_marker, human?, player_one_marker\\"?") do
     if human? do
-      "\nPlease enter your marker (1 letter): \n" |> in_out.read_input
+      get_marker_loop(in_out, default_marker, human?, player_one_marker, ~r/^[A-z]{1}$/)
     else
       default_marker
+    end
+  end
+
+  defp get_marker_loop(in_out, default_marker, human?, player_one_marker, validation) do
+    marker = "\nPlease enter your marker (1 letter): \n" |> in_out.read_input
+    cond do
+      String.match?(marker, validation) and marker != player_one_marker -> marker
+      true -> get_marker_loop(in_out, default_marker, human?, player_one_marker, validation)
     end
   end
 
@@ -50,9 +58,17 @@ defmodule TicTacToeElixir do
 
   defp get_player_name(in_out, human?, which_player, default) do
     if human? do
-      "\nPlease enter player #{which_player} name (up to 3 letters):\n" |> in_out.read_input
+      get_name_loop(in_out, human?, which_player, default, ~r/^[A-z]{1,3}$/)
     else
       default
+    end
+  end
+
+  defp get_name_loop(in_out, human?, which_player, default, validation) do
+    name = "\nPlease enter player #{which_player} name (up to 3 letters):\n" |> in_out.read_input
+    cond do
+      String.match?(name, validation) -> name
+      true -> get_name_loop(in_out, human?, which_player, default, validation)
     end
   end
 
