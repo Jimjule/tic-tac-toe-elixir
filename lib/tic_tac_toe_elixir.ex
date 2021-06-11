@@ -57,9 +57,9 @@ defmodule TicTacToeElixir do
   end
 
   defp get_name_loop(in_out, human?, which_player, default, validation) do
-    move = "\nPlease enter player #{which_player} name (up to 3 letters):\n" |> in_out.read_input
+    name = "\nPlease enter player #{which_player} name (up to 3 letters):\n" |> in_out.read_input
     cond do
-      String.match?(move, validation) -> move
+      String.match?(name, validation) -> name
       true -> get_name_loop(in_out, human?, which_player, default, validation)
     end
   end
