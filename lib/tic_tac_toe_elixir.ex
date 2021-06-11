@@ -17,7 +17,7 @@ defmodule TicTacToeElixir do
   defp explain_rules, do: "\nThe first player to move is X. To make a move, type the number of an unmarked square.\nTo win, be the first to place three of your markers in a row horizontally, vertically, or diagonally.\n"
 
   defp menu(in_out) do
-    case "Enter a number to choose:\n1. Play a game\n2. View game history\n3. Quit\n" |> in_out.read_input do
+    case "\nEnter a number to choose:\n1. Play a game\n2. View game history\n3. Quit\n" |> in_out.read_input do
       "1" -> set_up_game(in_out)
       "2" -> game_history_menu(in_out)
       _default -> true
@@ -36,6 +36,7 @@ defmodule TicTacToeElixir do
       marker: get_player_marker(in_out, "O", human_player_two?, player_one.marker)
     }
     Game.game_loop(false, "123456789", player_one, player_two, player_one.marker, 1, in_out) |> Board.winner(player_one, player_two) |> in_out.print
+    menu(in_out)
   end
 
   defp get_player_marker(in_out, default_marker, human?, player_one_marker\\"?") do
