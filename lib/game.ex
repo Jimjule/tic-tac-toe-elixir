@@ -10,7 +10,7 @@ defmodule Game do
 
   defp turn_logic(board_values, player_one, player_two, current_player_marker, turn, in_out) do
     in_out.print Board.split_board(board_values)
-    updated_board = get_move_loop(board_values, in_out, player_one, player_two, current_player_marker, ~r/[1-9]{1}/)
+    updated_board = get_move_loop(board_values, in_out, player_one, player_two, current_player_marker, ~r/^[1-9]{1}$/)
       |> Board.make_move(board_values, current_player_marker)
     Board.game_over(updated_board, player_one.marker, player_two.marker, current_player_marker, turn)
       |> game_loop(updated_board, player_one, player_two, swap_player(player_one.marker, player_two.marker, current_player_marker), turn + 1, in_out)
